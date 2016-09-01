@@ -162,7 +162,7 @@ public class ArchivoBasico {
             
     }
     
-    public void rutasDelSistema() {
+    public void propiedadesDelSistema() {
         System.out.println(System.getProperty("file.separator"));
         System.out.println(System.getProperty("java.home"));
         System.out.println(System.getProperty("java.version"));
