@@ -20,7 +20,11 @@ package archivobasico;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -55,7 +59,8 @@ public class ArchivoBasico {
             archivo = new FileReader(nombreArchivo);
             int c = archivo.read();
             while ( c != -1 ) {
-                System.out.print((char)c);
+                System.out.println("n:"+ Integer.toHexString(c) 
+                                    +" c:"+(char)c);
                 c = archivo.read();
             }
             archivo.close();
@@ -105,12 +110,78 @@ public class ArchivoBasico {
         }
         
     }
+    
+    public void escribirConBuffer(String nombreArchivo){
+        try {
+            BufferedWriter archivo = new BufferedWriter(new FileWriter(nombreArchivo));
+            archivo.write("Hola Mundo");
+            archivo.newLine();
+            archivo.append("Esta es una prueba");
+            archivo.flush();
+            archivo.close();
+        } catch (IOException ex) {
+            System.out.println("Tengo problemas de escritura en el archivo: "+ nombreArchivo);
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void lecturaBinaria(String nombreArchivo){
+        try {
+            FileInputStream archivo = new FileInputStream(nombreArchivo);
+            DataInputStream stream = new DataInputStream(archivo);
+            char c;
+            c = (char)stream.readByte();
+            int i = stream.readInt();
+            stream.close();
+            System.out.println("Caracter: "+c+" entero: "+i);
+            byte n1 = (byte) (i >>24);
+            byte n2 = (byte) (i >>16);
+            byte n3 = (byte) (i >>8);
+            byte n4 = (byte) (i);
+            System.out.println("cadena de int: "+(char)n1+(char)n2+(char)n3+(char)n4);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    public void escrituraBinaria(String nombreArchivo){
+        try {
+            FileOutputStream archivo = new FileOutputStream(nombreArchivo);
+            DataOutputStream stream = new DataOutputStream(archivo);
+            stream.writeBytes("Hello world");
+            stream.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }
+    
+    public void rutasDelSistema() {
+        System.out.println(System.getProperty("file.separator"));
+        System.out.println(System.getProperty("java.home"));
+        System.out.println(System.getProperty("java.version"));
+        System.out.println(System.getProperty("line.separator"));
+        System.out.println(System.getProperty("os.arch"));
+        System.out.println(System.getProperty("os.name"));
+        System.out.println(System.getProperty("os.version"));
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("user.home"));
+        System.out.println(System.getProperty("user.name"));
+        
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        ArchivoBasico archivo = new ArchivoBasico();
+        
     }
     
 }
