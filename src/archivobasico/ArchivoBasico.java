@@ -30,6 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -117,6 +118,10 @@ public class ArchivoBasico {
             archivo.write("Hola Mundo");
             archivo.newLine();
             archivo.append("Esta es una prueba");
+            
+            int numero = 2345;
+            archivo.write(numero);
+            
             archivo.flush();
             archivo.close();
         } catch (IOException ex) {
@@ -130,16 +135,21 @@ public class ArchivoBasico {
         try {
             FileInputStream archivo = new FileInputStream(nombreArchivo);
             DataInputStream stream = new DataInputStream(archivo);
-            char c;
-            c = (char)stream.readByte();
-            int i = stream.readInt();
-            stream.close();
-            System.out.println("Caracter: "+c+" entero: "+i);
-            byte n1 = (byte) (i >>24);
-            byte n2 = (byte) (i >>16);
-            byte n3 = (byte) (i >>8);
-            byte n4 = (byte) (i);
-            System.out.println("cadena de int: "+(char)n1+(char)n2+(char)n3+(char)n4);
+            
+            stream.skipBytes(11);
+            boolean b = stream.readBoolean();
+            System.out.println(b);
+//            char c;
+//            c = (char)stream.readByte();
+//            int i = stream.readInt();
+//            char segundoCaracter = (char)stream.readByte();
+//            stream.close();
+//            System.out.println("Caracter: "+c+" entero: "+i);
+//            byte n1 = (byte) (i >>24);
+//            byte n2 = (byte) (i >>16);
+//            byte n3 = (byte) (i >>8);
+//            byte n4 = (byte) (i);
+//            System.out.println("cadena de int: "+(char)n1+(char)n2+(char)n3+(char)n4);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -153,6 +163,13 @@ public class ArchivoBasico {
             FileOutputStream archivo = new FileOutputStream(nombreArchivo);
             DataOutputStream stream = new DataOutputStream(archivo);
             stream.writeBytes("Hello world");
+            
+            stream.writeBoolean(true);
+            stream.writeBoolean(false);
+            
+            stream.writeShort(50);
+            
+                    
             stream.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
@@ -175,13 +192,40 @@ public class ArchivoBasico {
         System.out.println(System.getProperty("user.name"));
         
     }
+    
+    public void lecturaAleatoria(String nombreArchivo){
+        try (RandomAccessFile archivo = new RandomAccessFile(nombreArchivo, "r")) {
+            System.out.println(archivo.readLine());
+            archivo.seek(4);
+            System.out.println(archivo.readLine());
+            archivo.seek(2);
+            archivo.skipBytes(4);
+            System.out.println(archivo.readLine());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void escrituraAleatoria(String nombreArchivo){
+        try (RandomAccessFile archivo = new RandomAccessFile(nombreArchivo,"rw")) {
+            archivo.seek(2);
+            String cadena="Hola Mundo Esta es una nueva linea\n";
+            archivo.write(cadena.getBytes());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ArchivoBasico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         ArchivoBasico archivo = new ArchivoBasico();
-        
+        archivo.lecturaAleatoria("archivo.dat");
     }
     
 }
