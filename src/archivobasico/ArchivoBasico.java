@@ -225,7 +225,7 @@ public class ArchivoBasico {
      */
     public static void main(String[] args) {
         ArchivoBasico archivo = new ArchivoBasico();
-        archivo.lecturaAleatoria("archivo.dat");
+        
     }
     
 }
